@@ -29,9 +29,10 @@ async function renderPokemon() {
         const pokemon = pokemonList[i];
         await getPokemon(i);
 
+    
 
 
-        pokemonCard.innerHTML += `<div>${currentPokemon[i]['name']}</div>`
+        pokemonCard.innerHTML += `<div id="pokemon${i+1}">${currentPokemon[i]['name']}</div>`
 
             // console.log(pokemon);
     }
