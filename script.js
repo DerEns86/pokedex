@@ -7,6 +7,7 @@ let pokemonList = [];
 async function init() {
     await loadPokemons();
     await renderPokemon();
+    console.log(currentPokemon);
 }
 
 async function loadPokemons() {
@@ -14,7 +15,7 @@ async function loadPokemons() {
     let response = await fetch(url);
     pokemonsAsJson = await response.json();
     pokemonList = pokemonsAsJson['results'];
-    console.log(pokemonList);
+    
 }
 
 async function getPokemon(i) {
@@ -33,28 +34,56 @@ async function renderPokemon() {
     for (let i = 0; i < pokemonList.length; i++) {
         const pokemon = pokemonList[i];
         await getPokemon(i);
-        // pokemonCard.innerHTML += `
-        // <div class="card" style="width: 18rem;">
-        //     <div class="navBtns d-flex justify-content-between">
-        //         <button>back</button>
-        //         <button>Like</button>
-        //     </div>
-        //     <img src="${getCurrentPokemonImg(i)}" class="card-img-top" alt="...">
-        //     <div class="card-body">
-        //       <h5 class="card-title">Card title</h5>
-        //       <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        //       <a href="#" class="btn btn-primary">Go somewhere</a>
-        //     </div>
-        //   </div>`
-        console.log(currentPokemon[i]['sprites']['front_default']);
+        
 
-        pokemonCard.innerHTML += `<div id="pokemon${i + 1}">${currentPokemon[i]['name']}</div>
-        <img src="${getCurrentPokemonImg(i)}" class="card-img-top" alt="...">`
-
-
+        pokemonCard.innerHTML += generatePokemonList(i);
+       
     }
-    function getCurrentPokemonImg(i) {
-        return currentPokemon[i]['sprites']['front_default'];
+    
+
+}
+function getCurrentPokemonImg(i) {
+        return currentPokemon[i].sprites.other.dream_world['front_default'];
+        
     }
 
+function getPokemonName(i) {
+    return currentPokemon[i].name;
+}
+
+function getPokemonId(i) {
+    return currentPokemon[i].id;
+}
+
+// function getPokemonTypes(i) {
+//     return currentPokemon[i].types;
+// }
+
+function getPokemonTypes(i) {
+    let types = currentPokemon[i].types;
+    let typesHtml = '';
+    for (let j = 0; j < types.length; j++) {
+        const type = types[j].type.name;
+        typesHtml += `<div class="type">${type}</div>`;
+    }
+    return typesHtml;
+}
+
+
+
+function generatePokemonList(i){
+    return /*html*/`
+        <div class="card" style="width: 18rem;" id="ListCard${getPokemonId(i)}">
+             <div class="listHeader d-flex justify-content-between">
+             <h5 class="card-title">${getPokemonName(i)}</h5>
+             <h5 id="pokemonId">${getPokemonId(i)}</h5>
+             </div>
+             
+             <div class="card-body d-flex">
+               
+               <p class="card-text " id="pokemonTypes">${getPokemonTypes(i)}</p>
+             </div>
+             <img src="${getCurrentPokemonImg(i)}" class="card-img-top" alt="...">
+        </div>
+    `
 }
