@@ -12,6 +12,42 @@
 </head>
 <body onload="init()">
     
+    <div class="pokemonCardOverlay " id="pokemonCardOverlay">
+        <div class="card overlay" style="width: 32rem;" >
+            <div class="listHeader d-flex justify-content-between">
+            <h5 class="card-title" id="currentPokemonName">NAME</h5>
+            <h5 id="pokemonId">ID</h5>
+            </div>
+            
+            <div class="card-body d-flex">
+              
+              <p class="card-text " id="CurrentPokemonTypes">${getPokemonTypes(i)}</p>
+            </div>
+            <img  class="card-img-top" id="currentPokemonImage">
+
+            <div class="cardStats">
+                
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                      <div class="nav-link active" aria-current="page" id="aboutLink">About</div>
+                    </li>
+                    <li class="nav-item">
+                      <div class="nav-link " onclick="openBaseStat()" id="baseStatsLink">Base Stats</div>
+                    </li>
+                    <li class="nav-item">
+                      <div class="nav-link" >Link</div>
+                    </li>
+                    <li class="nav-item">
+                      <div class="nav-link disabled" aria-disabled="true">Disabled</div>
+                    </li>
+                  </ul>
+
+                  <div class="statsContent" id="statsContentAbout"></div>
+                  <div class="statsContent d-none" id="statsContentBase"></div>
+
+            </div>
+       </div>
+    </div>
 
     <div class="pokemonCards" id="pokemonCard" >
         

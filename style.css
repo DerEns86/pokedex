@@ -1,3 +1,18 @@
 .pokemonCards img {
     width: 150px;
 }
+
+.overlay img {
+    width: 150px;
+}
+
+.statsContent {
+    /* height: 400px; */
+    background-color: beige;
+}
+
+.pokemonCardOverlay{
+    width: 80vw;
+    height: 80vh;
+    background-color: aqua;
+}

@@ -66,13 +66,13 @@ function getValuefromCurrentPokem(key, i) {
     return currentPokemon[i][key];
 }
 
-// function getPokemonName(i) {
-//     return currentPokemon[i].name;
-// }
+function getPokemonName(i) {
+    return currentPokemon[i].name;
+}
 
-// function getPokemonId(i) {
-//     return currentPokemon[i].id;
-// }
+function getPokemonId(i) {
+    return currentPokemon[i].id;
+}
 
 
 
@@ -86,37 +86,14 @@ function getPokemonTypes(i) {
     return typesHtml;
 }
 
-function getPokemonAbilities(i) {
-    let abilities = currentPokemon[i].abilities;
-    let abilitiesHtml = '';
-    for (let j = 0; j < abilities.length; j++) {
-        const ability = abilities[j].ability.name;
-        abilitiesHtml += `<div class="ability">${ability}</div>`;
-    }
-    return abilitiesHtml;
-}
-
-function getPokemonBaseStats(i) {
-    let baseStats = currentPokemon[i].stats;
-    let baseStatsHtml = '';
-    for (let j = 0; j < baseStats.length; j++) {
-        const baseStatName = baseStats[j].stat.name;
-        const baseStatValue = baseStats[j].base_stat;
-        baseStatsHtml += `<div class="baseStatName">${baseStatName}</div>
-                          <div class="baseStatValue">${baseStatValue}</div>
-        `;
-    }
-    return baseStatsHtml;
-}
-
 
 
 function generatePokemonList(i) {
     return /*html*/`
-        <div onclick="openPokemonCardOverlay(${i})" class="card" style="width: 18rem;" id="ListCard${getValuefromCurrentPokem('id', i)}">
+        <div onclick="openPokemonCardOverlay(${i})" class="card" style="width: 18rem;" id="ListCard${getPokemonId(i)}">
              <div class="listHeader d-flex justify-content-between">
-             <h5 class="card-title">${getValuefromCurrentPokem('name', i)}</h5>
-             <h5 id="pokemonId">${getValuefromCurrentPokem('id', i)}</h5>
+             <h5 class="card-title">${getPokemonName(i)}</h5>
+             <h5 id="pokemonId">${getPokemonId(i)}</h5>
              </div>
              
              <div class="card-body d-flex">
@@ -129,22 +106,20 @@ function generatePokemonList(i) {
 }
 
 function openPokemonCardOverlay(i) {
-    document.getElementById('currentPokemonName').innerHTML = getValuefromCurrentPokem('name', i);
-    document.getElementById('pokemonId').innerHTML = getValuefromCurrentPokem('id', i);
+    document.getElementById('currentPokemonName').innerHTML = getPokemonName(i);
+    document.getElementById('pokemonId').innerHTML = getPokemonId(i);
     document.getElementById('CurrentPokemonTypes').innerHTML = getPokemonTypes(i);
     document.getElementById('currentPokemonImage').src = `${getCurrentPokemonImg(i)}`;
     console.log('open' + i);
     // generatePokemonCardOverlay(i);
-    renderStatsAbout(i);
-    renderStatsBase(i);
 }
 
 function generatePokemonCardOverlay(i) {
     return /*html*/`
-        <div class="card overlay d-none" style="width: 32rem;" id="ListCard${getValuefromCurrentPokem('id', i)}">
+        <div class="card overlay d-none" style="width: 32rem;" id="ListCard${getPokemonId(i)}">
              <div class="listHeader d-flex justify-content-between">
-             <h5 class="card-title">${getValuefromCurrentPokem('name', i)}</h5>
-             <h5 id="pokemonId">${getValuefromCurrentPokem('id', i)}</h5>
+             <h5 class="card-title">${getPokemonName(i)}</h5>
+             <h5 id="pokemonId">${getPokemonId(i)}</h5>
              </div>
              
              <div class="card-body d-flex">
@@ -161,23 +136,13 @@ function renderStatsAbout(i) {
 
     content.innerHTML = /*html*/`
         <div id="species"><span>Species:</span><span>${getCurrentPokemonSpecies(i)}</span></div>
-        <div id="height"><span>Height:</span><span>${getValuefromCurrentPokem('height', i)}</span></div>
-        <div id="weight"><span>Weight:</span><span>${getValuefromCurrentPokem('weight', i)}</span></div>
-        <div id="abilities">${getPokemonAbilities(i)}</div>
+        <div id="height"></div>
+        <div id="species"></div>
+        <div id="species"></div>
 
+        <p>Breeding</p>
+        <div id="gender"></div>
+        <div id="egggroups"></div>
+        <div id="eggCycle"></div>
     `
-}
-
-function renderStatsBase(i) {
-    let content = document.getElementById('statsContentBase');
-
-    content.innerHTML = getPokemonBaseStats(i);
-}
-
-function openBaseStat(){
-    document.getElementById('statsContentBase').classList.remove('d-none');
-    document.getElementById('statsContentAbout').classList.add('d-none');
-    document.getElementById('aboutLink').classList.remove('active');
-    document.getElementById('baseStatsLink').classList.add('active');
-
 }
