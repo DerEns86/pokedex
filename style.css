@@ -1,18 +1,137 @@
-.pokemonCards img {
-    width: 150px;
+
+.pokemonCards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
 }
 
-.overlay img {
-    width: 150px;
+.card:hover {
+    transform: scale(0.95);
+    opacity: 0.7;
+}
+
+.background {
+    height: 240px;
+    margin-bottom: -20px;
+}
+
+
+
+.pokemonCards img {
+    max-width: 150px;
+    aspect-ratio: 1;
+}
+
+.cardOverlay img {
+    height: 180px;
+    
+}
+
+.card {
+    border-radius: 0.75rem;
+    min-width: 150px;
+}
+
+.cardStats {
+    height: 230px;
+    background-color: white;
+    overflow: auto;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    padding-top: 10px;
 }
 
 .statsContent {
-    /* height: 400px; */
-    background-color: beige;
+    padding: 6px;
+}
+
+.imgTransparent {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    opacity: 0.02;
+}
+
+.type {
+    border: 1px solid grey;
+    width: 60px;
+    text-align: center;
+    margin-bottom: 3px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+}
+
+
+#pokeballTop {
+    height: 200px;
+    position: absolute;
+    left: calc(50% - 200px);   
+}
+
+#pokeball-bottom {
+    height: 200px;
+    position: relative;
+    
+    left: calc(50% - 200px);   
+  
+}
+
+.pokeball-bottom-Overlay {
+    height: 200px;
+    position: sticky;
+    top: 200px;
+    z-index: 2;
+    background-color: white;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    height: 200px;
+    background-color: rgb(228,31,37);
+    z-index: 1;
+    
 }
 
 .pokemonCardOverlay{
-    width: 80vw;
-    height: 80vh;
-    background-color: aqua;
+    width: 400px;
+    right: 0;
+    height: 0;
+    /* background-color: aqua; */
+    overflow: hidden;
+    position: sticky;
+    top: 200px;
+    left: calc(50% - 200px);
+    border-left: 9px solid;
+    border-right: 9px solid;
+    z-index: 9;
+    transition: all 0.4s ease-out;
+}
+
+.overlay-background {
+    /* background-color: blue; */
+}
+
+.div-bottom-ball {
+    /* background-color: blue;
+    height: 100vh; */
+}
+
+.baseStatGreen {
+    color: green;
+}
+
+.baseStatRed {
+    color: red
+}
+
+.moveName {
+   
+    background-color: rgba(0, 0, 0,0.05);
+    padding: 6px;
+    line-height: 2.5 !important;
+    border-radius: 12px;    
 }

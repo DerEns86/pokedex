@@ -35,10 +35,11 @@ async function renderPokemon() {
         const pokemon = pokemonList[i];
         await getPokemon(i);
         await getCurrentPokemonSpeciesData(i);
+        
 
 
         pokemonCard.innerHTML += generatePokemonList(i);
-
+        
     }
 
 
@@ -102,57 +103,117 @@ function getPokemonBaseStats(i) {
     for (let j = 0; j < baseStats.length; j++) {
         const baseStatName = baseStats[j].stat.name;
         const baseStatValue = baseStats[j].base_stat;
-        baseStatsHtml += `<div class="baseStatName">${baseStatName}</div>
-                          <div class="baseStatValue">${baseStatValue}</div>
+
+        const baseStatClass = changeBaseStatColor (baseStatValue);
+
+        baseStatsHtml += `<div class="baseStatName">${capitalizeFirstLetter(baseStatName)}</div>
+                          <div class="baseStatValue ${baseStatClass}">${baseStatValue}</div>`;
+    }
+
+    return baseStatsHtml;
+}
+
+function changeBaseStatColor (baseStatValue) {
+    if (baseStatValue > 50) {
+        return 'baseStatGreen';
+    } else {
+        return 'baseStatRed';
+    }
+}
+
+function getPokemonMoves(i) {
+    let moves = currentPokemon[i].moves;
+    let movesHtml = '';
+    for (let j = 0; j < moves.length; j++) {
+        const move = moves[j].move.name;
+        movesHtml += `<span class="moveName">${move}</span>
+                         
         `;
     }
-    return baseStatsHtml;
+    return movesHtml;
 }
 
 
 
 function generatePokemonList(i) {
     return /*html*/`
-        <div onclick="openPokemonCardOverlay(${i})" class="card" style="width: 18rem;" id="ListCard${getValuefromCurrentPokem('id', i)}">
+        <div onclick="openPokemonCardOverlay(${i})" class="card" style="background-color: ${getBackgroundColor(i)};" id="ListCard${getValuefromCurrentPokem('id', i)}">
              <div class="listHeader d-flex justify-content-between">
-             <h5 class="card-title">${getValuefromCurrentPokem('name', i)}</h5>
-             <h5 id="pokemonId">${getValuefromCurrentPokem('id', i)}</h5>
+                <h5 class="card-title">${capitalizeFirstLetter(getValuefromCurrentPokem('name', i))}</h5>
+                <h5 id="pokemonId"># ${getValuefromCurrentPokem('id', i)}</h5>
              </div>
              
-             <div class="card-body d-flex">
-               
-               <p class="card-text " id="pokemonTypes">${getPokemonTypes(i)}</p>
+             <div class="card-body "id="pokemonTypes">${getPokemonTypes(i)}
+              
              </div>
-             <img src="${getCurrentPokemonImg(i)}" class="card-img-top" alt="...">
+                <img src="./pokemon.png" class="imgTransparent">
+                <img src="${getCurrentPokemonImg(i)}" class="card-img-top" alt="...">
         </div>
     `
 }
 
 function openPokemonCardOverlay(i) {
-    document.getElementById('currentPokemonName').innerHTML = getValuefromCurrentPokem('name', i);
-    document.getElementById('pokemonId').innerHTML = getValuefromCurrentPokem('id', i);
-    document.getElementById('CurrentPokemonTypes').innerHTML = getPokemonTypes(i);
-    document.getElementById('currentPokemonImage').src = `${getCurrentPokemonImg(i)}`;
+    // document.getElementById('pokemonCardOverlay').classList.remove('d-none');
+    document.getElementById('pokemonCardOverlay').style.height = '450px';
+    // document.getElementsByTagName('html')[0].style.overflow = "hidden";
+
+    
+   
     console.log('open' + i);
-    // generatePokemonCardOverlay(i);
+    
+    renderPokemonOverlay(i);
     renderStatsAbout(i);
     renderStatsBase(i);
+    renderStatsMoves(i);
+}
+
+function renderPokemonOverlay(i) {
+    let overlayContent = document.getElementById('pokemonCardOverlay');
+
+    overlayContent.innerHTML = generatePokemonCardOverlay(i);
+
 }
 
 function generatePokemonCardOverlay(i) {
     return /*html*/`
-        <div class="card overlay d-none" style="width: 32rem;" id="ListCard${getValuefromCurrentPokem('id', i)}">
-             <div class="listHeader d-flex justify-content-between">
-             <h5 class="card-title">${getValuefromCurrentPokem('name', i)}</h5>
-             <h5 id="pokemonId">${getValuefromCurrentPokem('id', i)}</h5>
-             </div>
-             
-             <div class="card-body d-flex">
-               
-               <p class="card-text " id="pokemonTypes">${getPokemonTypes(i)}</p>
-             </div>
-             <img src="${getCurrentPokemonImg(i)}" class="card-img-top" alt="...">
-        </div>
+     <div class="cardOverlay ">
+        <div class="background" style="background-color: ${getBackgroundColor(i)};"> 
+            <div class="listHeader d-flex justify-content-between">
+                <h5 class="card-title" id="currentPokemonName">${capitalizeFirstLetter(getValuefromCurrentPokem('name', i))}</h5>
+                <h5 id="pokemonId">${getValuefromCurrentPokem('id', i)}</h5>
+            </div>
+
+            <div class="card-body-overlay ">
+                <div class="card-text d-flex" id="CurrentPokemonTypes">${getPokemonTypes(i)}</div>
+                <div class="d-flex justify-content-center">
+                <img class="card-img-top" src= "${getCurrentPokemonImg(i)}"  id="currentPokemonImage">
+                </div>    
+            </div>
+
+
+            </div>
+            <div class="cardStats">
+
+                <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <div class="nav-link active" aria-current="page" onclick="openAbout()" id="aboutLink">About</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link " onclick="openBaseStat()" id="baseStatsLink">Base Stats</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-link" onclick="openMoves()" id="movesLink">Moves</div>
+                </li>
+
+                </ul>
+
+                <div class="statsContent" id="statsContentAbout"></div>
+                <div class="statsContent d-none" id="statsContentBase"></div>
+                <div class="statsContent d-none" id="statsContentMoves"></div>
+
+        
+    </div>
+    
     `
 }
 
@@ -174,10 +235,71 @@ function renderStatsBase(i) {
     content.innerHTML = getPokemonBaseStats(i);
 }
 
-function openBaseStat(){
-    document.getElementById('statsContentBase').classList.remove('d-none');
-    document.getElementById('statsContentAbout').classList.add('d-none');
-    document.getElementById('aboutLink').classList.remove('active');
-    document.getElementById('baseStatsLink').classList.add('active');
 
+function renderStatsMoves(i) {
+    let content = document.getElementById('statsContentMoves');
+
+    content.innerHTML = getPokemonMoves(i);
+}
+
+
+// ########## Uppercase first letter
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+// ##################
+
+
+function openBaseStat() {
+   
+    document.getElementById('statsContentBase').classList.remove('d-none');
+    
+   
+    document.getElementById('statsContentAbout').classList.add('d-none');
+    document.getElementById('statsContentMoves').classList.add('d-none');
+    
+   
+    document.getElementById('aboutLink').classList.remove('active');
+    document.getElementById('movesLink').classList.remove('active');
+    
+   
+    document.getElementById('baseStatsLink').classList.add('active');
+}
+
+function openMoves() {
+    document.getElementById('statsContentMoves').classList.remove('d-none');
+    
+    document.getElementById('statsContentAbout').classList.add('d-none');
+    document.getElementById('statsContentBase').classList.add('d-none');
+    
+    document.getElementById('aboutLink').classList.remove('active');
+    document.getElementById('baseStatsLink').classList.remove('active');
+    
+    document.getElementById('movesLink').classList.add('active');
+}
+
+function openAbout() {
+    document.getElementById('statsContentAbout').classList.remove('d-none');
+    
+    document.getElementById('statsContentBase').classList.add('d-none');
+    document.getElementById('statsContentMoves').classList.add('d-none');
+    
+    document.getElementById('baseStatsLink').classList.remove('active');
+    document.getElementById('movesLink').classList.remove('active');
+    
+    document.getElementById('aboutLink').classList.add('active');
+}
+
+
+// ###################################################
+
+
+
+// Schließe das Overlay
+function closePokemonCardOverlay() {
+    document.getElementById('pokemonCardOverlay').style.height = '0';
+    document.getElementsByTagName('html')[0].style.overflow = 'auto';
+    
 }
